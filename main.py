@@ -35,7 +35,7 @@ for (x, y, w, h) in faces:
     
     list=[]
 
-cv2.imshow('img', img)
+cv2.imshow('Ventana', img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
