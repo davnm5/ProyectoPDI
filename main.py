@@ -1,4 +1,4 @@
-import nuimport cv2
+import cv2
 import numpy as np
 aux=[]
 list=[]
@@ -43,7 +43,7 @@ while(True):
 
         
     cv2.imshow("Video:", frame)
-    key = cv2.waitKey(33) & 0xff
+    key = cv2.waitKey(33)
     if (key == 27):
         break
 
