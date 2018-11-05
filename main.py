@@ -15,8 +15,10 @@ while(True):
     x = int(width /1.5)
     y = int(height /1.5)
     frame = cv2.resize(frame, (x, y), interpolation=cv2.INTER_AREA)
+    frame=cv2.subtract(frame,50)
+    frame=cv2.bilateralFilter (frame,5,75,75)
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+    faces = face_cascade.detectMultiScale(gray, 1.3,5)
     
     if(not ret):
         break
@@ -24,10 +26,10 @@ while(True):
         frame = cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
         roi_gray = gray[y:y + h, x:x + w]
         roi_color = frame[y:y + h, x:x + w]
-        eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 5)
+        eyes = eye_cascade.detectMultiScale(roi_gray, 1.3,5)
         for (ex, ey, ew, eh) in eyes:
             cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 255), -1)
-            mouth = mouth_cascade.detectMultiScale(roi_gray, 1.3)
+            mouth = mouth_cascade.detectMultiScale(roi_gray, 1.3,5)
     
             for(mx, my, mw, mh) in mouth:
 
@@ -36,7 +38,7 @@ while(True):
                 max_h = np.max(aux)
                 for i in list:
                     if(i[3] == max_h):
-                        cv2.rectangle(roi_color, (i[0], i[1]), (i[2], i[3]), (0, 0, 255), -1)
+                        cv2.rectangle(roi_color, (i[0], i[1]), (i[2], i[3]), (0, 0, 255),-1)
         
     cv2.imshow("Video:", frame)
     key = cv2.waitKey(33)
