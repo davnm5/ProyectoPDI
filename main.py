@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 aux = []
-list = []
+lst = []
 face_cascade = cv2 . CascadeClassifier ('data/haarcascade_frontalface_default.xml') 
 eye_cascade = cv2 . CascadeClassifier ('data/haarcascade_eye.xml')
 mouth_cascade = cv2.CascadeClassifier('data/mouth.xml') 
@@ -31,16 +31,16 @@ while(True):
             
             if(ey < (fy / 2)):  # valida de tal forma que solo muestra aquellos rectangulos que estan por arriba de la mitad de la cara (ojos)
                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 255), -1)  # dibujamos el rectangulo en las ubicaciones correspondientes
-        list.clear()
+        lst.clear()
         aux.clear()    
         mouth = mouth_cascade.detectMultiScale(roi_gray, 1.3, 5)
         for(mx, my, mw, mh) in mouth:
-            list.append([mx, my, mx + mw, my + mh])  # se crea una lista con coordenadas de los vertices de rectangulos
+            lst.append([mx, my, mx + mw, my + mh])  # se crea una lista con coordenadas de los vertices de rectangulos
             aux.append(my + mh)  # se crea una lista con todas las altura de los rectangulos
             max_h = np.max(aux)  # con la ayuda de numpy se determina cual es el rectangulo mas cercano al borde inferior
             
 # valida de tal forma que solo muestra aquellos rectangulos que estan por debajo de la mitad de la cara (boca) y  esten mas cercanos al borde inferior del roi_cara   
-        for i in list:
+        for i in lst:
             if(i[3] == max_h and i[1] >= (fy / 2)): 
                 cv2.rectangle(roi_color, (i[0], i[1]), (i[2], i[3]), (0, 0, 255), -1)
         

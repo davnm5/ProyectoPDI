@@ -1,6 +1,6 @@
 import numpy as np
 import cv2
-list = []
+lst = []
 aux = []
 face_cascade = cv2.CascadeClassifier('data/haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('data/haarcascade_eye.xml')
@@ -25,16 +25,16 @@ for (x, y, w, h) in faces:
         if(ey<(fy/2)):
             cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 255), -1)
     
-    list.clear()
+    lst.clear()
     aux.clear()
     mouth = mouth_cascade.detectMultiScale(roi_gray, 1.3,5)
     
     for(mx, my, mw, mh) in mouth:
-        list.append([mx, my, mx + mw, my + mh])
+        lst.append([mx, my, mx + mw, my + mh])
         aux.append(my + mh)
         max_h = np.max(aux)
 
-    for i in list:
+    for i in lst:
         if(i[3]==max_h and i[1]>(fy/2)):
             cv2.rectangle(roi_color, (i[0],i[1]), (i[2],i[3]), (0, 0, 255), -1)
             
