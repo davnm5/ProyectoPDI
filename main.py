@@ -31,6 +31,11 @@ while(True):
             
             if(ey < (fy / 2)):  # valida de tal forma que solo muestra aquellos rectangulos que estan por arriba de la mitad de la cara (ojos)
                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 255), -1)  # dibujamos el rectangulo en las ubicaciones correspondientes
+            if(len(eyes) == 1): # si solo se detecta un ojo
+                if(ex < (fx / 2)): # si el ojo esta del lado izquierdo
+                    cv2.rectangle(roi_color, (ex * 2, ey), ((ex * 2) + ew, ey + eh), (0, 255, 255), -1) # dibujamos un rectangulo del lado derecho
+                else:
+                    cv2.rectangle(roi_color, (ex // 2, ey), ((ex // 2)+ ew, ey + eh), (0, 255, 255), -1) # dibujamos un rectangulo del lado izquierdo
         lst.clear()
         aux.clear()    
         mouth = mouth_cascade.detectMultiScale(roi_gray, 1.3, 5)
