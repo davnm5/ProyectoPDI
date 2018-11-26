@@ -5,13 +5,11 @@ aux = []
 face_cascade = cv2.CascadeClassifier('data/haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('data/haarcascade_eye.xml')
 mouth_cascade = cv2.CascadeClassifier('data/mouth.xml')
-img = cv2.imread('img/lena.bmp')
+img = cv2.imread('resources/friends2.jpg')
 height, width = img.shape[:2]
 x = int(width / 2)
 y = int(height / 2)
-img = cv2.resize(img, (x, y), interpolation=cv2.INTER_AREA)
-cv2.imshow("inicial", img)
-#img = cv2.subtract(img, 50)
+img = cv2.resize(img,(0,0),fx=0.75,fy=0.75)
 img = cv2.bilateralFilter (img, 5, 75, 75)
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 faces = face_cascade.detectMultiScale(gray, 1.3,5)
@@ -20,6 +18,7 @@ for (x, y, w, h) in faces:
     roi_gray = gray[y:y + h, x:x + w]
     roi_color = img[y:y + h, x:x + w]
     fx,fy=roi_gray.shape[:2]
+    
     eyes = eye_cascade.detectMultiScale(roi_gray, 1.3,5)
     for (ex, ey, ew, eh) in eyes:
         if(ey<(fy/2)):
