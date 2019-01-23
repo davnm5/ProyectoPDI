@@ -132,8 +132,14 @@ if opcion =="3":
     plt.subplot(224),plt.imshow(image2,cmap = 'gray')
     plt.title('Resultado Final'), plt.xticks([]), plt.yticks([])
     plt.show()
- 
+    i1=cv2.imread("resources/ruido.png")
+    i2=cv2.imread("resources/sin_ruido.png")
+    detectar(i1,"Ruido Periodico")
+    detectar(i2,"Sin Ruido Periodico")
     
+    
+    
+ 
     
 cv2.destroyAllWindows()
 
