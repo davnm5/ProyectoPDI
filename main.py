@@ -6,17 +6,19 @@ lst = []
 face_cascade = cv2 . CascadeClassifier ('data/haarcascade_frontalface_default.xml') 
 eye_cascade = cv2 . CascadeClassifier ('data/haarcascade_eye.xml')
 mouth_cascade = cv2.CascadeClassifier('data/mouth.xml') 
+
+print("0: Ninguno, 1: Gaussiano, 2: Sal y Pimienta" )
+opcion = input("Seleccione el tipo de ruido: ")
+
 capture = cv2.VideoCapture("resources/video.mp4")
 width = capture.get(3)
 height = capture.get(4)
 cv2.namedWindow("Video:", cv2.WINDOW_AUTOSIZE)
 
-print("0: Ninguno, 1: Gaussiano, 2: Sal y Pimienta")
-opcion = input("Seleccione el tipo de ruido: ")
-
 while(True):
     
     ret, frame = capture.read()
+        
     if(frame is not None):
         frame = cv2.resize(frame,(0,0),fx=0.70,fy=0.70)
 
@@ -24,12 +26,11 @@ while(True):
         if opcion == "1":
             row, col, ch = frame.shape
             mean = 0
-            sigma = 0.8
+            sigma = 0.9
             gauss = np.random.normal(mean, sigma, (row, col, ch))
             gauss = gauss.reshape(row, col, ch)
             gauss = np.uint8(gauss)
             frame = cv2.add(frame, gauss)
-
             cv2.imshow("Ruido Gauss:", frame)
 
         # Ruido Sal y Pimienta
@@ -63,9 +64,9 @@ while(True):
             frame = np.array(frame)
             # Convert RGB to BGR
             frame = frame[:, :, ::-1].copy()
+            
 
-        frame = cv2.subtract(frame,10) #aumenta el brillo
-        #frame = cv2.bilateralFilter(frame, 5, 75, 75)  # se aplica un filtro al frame para reducir el ruido
+        frame = cv2.subtract(frame,10)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         
     
@@ -99,12 +100,13 @@ while(True):
          
         
         cv2.imshow("Video:",frame)
-        key = cv2.waitKey(33)
+        key = cv2.waitKey(10)
         if (key == 27):
             break
         
     else:
         break
+
 cv2.imshow("cara oculta",roi_color)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
