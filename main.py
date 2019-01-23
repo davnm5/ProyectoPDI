@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from PIL import Image, ImageFilter
 aux = []
 lst = []
 face_cascade = cv2 . CascadeClassifier ('data/haarcascade_frontalface_default.xml') 
@@ -10,13 +11,61 @@ width = capture.get(3)
 height = capture.get(4)
 cv2.namedWindow("Video:", cv2.WINDOW_AUTOSIZE)
 
+print("0: Ninguno, 1:Gaussiano, 2:Sal y Pimienta")
+opcion = input("Seleccione el tipo de ruido: ")
+
 while(True):
     
     ret, frame = capture.read()
     if(frame is not None):
         frame = cv2.resize(frame,(0,0),fx=0.70,fy=0.70)
+
+        # Ruido Gauss
+        if opcion == "1":
+            row, col, ch = frame.shape
+            mean = 0
+            sigma = 0.8
+            gauss = np.random.normal(mean, sigma, (row, col, ch))
+            gauss = gauss.reshape(row, col, ch)
+            gauss = np.uint8(gauss)
+            frame = cv2.add(frame, gauss)
+
+            cv2.imshow("Ruido Gauss:", frame)
+
+        # Ruido Sal y Pimienta
+        if opcion == "2":
+            row, col, ch = frame.shape
+
+            s_vs_p = 0.5
+            amount = 0.08
+            noisy = np.copy(frame)
+            # Sal
+            num_salt = np.ceil(amount * frame.size * s_vs_p)
+            coords = [np.random.randint(0, i - 1, int(num_salt))
+                      for i in frame.shape]
+            noisy[tuple(coords)] = 255
+
+            # Pimienta
+            num_pepper = np.ceil(amount * frame.size * (1. - s_vs_p))
+            coords = [np.random.randint(0, i - 1, int(num_pepper))
+                      for i in frame.shape]
+            noisy[tuple(coords)] = 0
+            frame = noisy
+
+            cv2.imshow("Ruido Sal y Pimienta:", frame)
+
+        # Filtro Mediano
+        if opcion != "0":
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            frame = Image.fromarray(frame)
+
+            frame = frame.filter(ImageFilter.MedianFilter(5))
+            frame = np.array(frame)
+            # Convert RGB to BGR
+            frame = frame[:, :, ::-1].copy()
+
         frame = cv2.subtract(frame,10) #aumenta el brillo
-        frame = cv2.bilateralFilter(frame, 5, 75, 75)  # se aplica un filtro al frame para reducir el ruido
+        #frame = cv2.bilateralFilter(frame, 5, 75, 75)  # se aplica un filtro al frame para reducir el ruido
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         
     
