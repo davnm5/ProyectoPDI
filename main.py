@@ -11,7 +11,7 @@ width = capture.get(3)
 height = capture.get(4)
 cv2.namedWindow("Video:", cv2.WINDOW_AUTOSIZE)
 
-print("0: Ninguno, 1:Gaussiano, 2:Sal y Pimienta")
+print("0: Ninguno, 1: Gaussiano, 2: Sal y Pimienta")
 opcion = input("Seleccione el tipo de ruido: ")
 
 while(True):
